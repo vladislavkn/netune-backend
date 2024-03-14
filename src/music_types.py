@@ -1,18 +1,16 @@
-from typing import List
-
 from pydantic import BaseModel
 
 
 class Author(BaseModel):
     name: str
-    genres: List[str]
+    genres: list[str]
 
 
 class Track(BaseModel):
     name: str
-    author: str
+    authors: list[str]
 
 
 class MusicTasteRequestBody(BaseModel):
-    tracks: List[Track]
-    authors: List[Author]
+    tracks: list[Track]
+    authors: list[Author]
