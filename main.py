@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from src.music_taste_chain import invoke_music_taste_chain
-from src.music_types import MusicTasteRequestBody
+from music_taste.chain import invoke_music_taste_chain
+from shared.models import MusicTasteRequestBody
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
