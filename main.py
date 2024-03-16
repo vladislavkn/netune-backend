@@ -10,7 +10,9 @@ from fastapi import FastAPI
 
 app = FastAPI()
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.__dict__[config['LOGLEVEL']])
+logging.basicConfig(
+    level=logging.__dict__[config['LOGLEVEL']],
+    format='%(asctime)s %(message)s')
 
 app.add_middleware(
     CORSMiddleware,
