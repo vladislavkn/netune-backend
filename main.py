@@ -1,6 +1,6 @@
-import logging
+import os
 from fastapi.middleware.cors import CORSMiddleware
-from shared.config import config
+from shared.logger import logger
 from shared.models import MusicTasteRequestBody
 from shared.format_info_prompt import format_info_prompt
 from music_suggestions.chain import music_suggestions_chain
@@ -9,14 +9,13 @@ from fastapi import FastAPI
 
 
 app = FastAPI()
-logger = logging.getLogger(__name__)
-logging.basicConfig(
-    level=logging.__dict__[config['LOGLEVEL']],
-    format='%(asctime)s %(message)s')
+
+origin = os.environ.get('FRONTEND_URL', "http://localhost:5432")
+logger.info('CORS origin: %s', origin)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[config['FRONTEND_URL']],
+    allow_origins=[origin],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
