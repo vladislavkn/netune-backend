@@ -15,7 +15,6 @@ The list of the tracks with authors in the brackets:
 - Nuthin' but a 'G' Thang (Dr. Dre ft. Snoop Dogg)
 - Sinnerman (Nina Simone)
 - Juicy (The Notorious B.I.G.)
-
 The list of the artists with their genres in brackets:
 - B.B. King (Blues, R&B)
 - Snoop Dogg (Hip-hop, G-funk)

@@ -1,22 +1,26 @@
 import json
 import re
-from music_suggestions.messages import SYSTEM_MESSAGE, EXAMPLES
+from music_suggestions.messages import SYSTEM_MESSAGE
 from music_suggestions.llm import llm
-from shared.create_few_shot_prompt_template import create_few_shot_prompt_template
+from langchain.prompts import ChatPromptTemplate
 
-music_suggestions_final_prompt = create_few_shot_prompt_template(
-    SYSTEM_MESSAGE, EXAMPLES)
+music_suggestions_final_prompt = ChatPromptTemplate.from_messages(
+    [
+        ("system", SYSTEM_MESSAGE),
+        ("human", "{input}"),
+    ]
+)
 
-JSON_ARRAY_REGEXP = re.compile('\[\s{0,1}\".+\"\s{0,1}\]')
+JSON_ARRAY_REGEXP = re.compile('\[\s*(\".+\",\s*)*\".+\"\s*\]')
 
 
 def parseJSONArray(ai_message: str) -> str:
-    matching_string = JSON_ARRAY_REGEXP.findall(ai_message)
-    if len(matching_string) == 0:
-        return []
+    match = JSON_ARRAY_REGEXP.search(ai_message)
+    if match:
+        json_array_string = match.group()
+        return json.loads(json_array_string)
     else:
-        matching_string = matching_string[0]
-        return json.loads(matching_string)
+        return []
 
 
 music_suggestions_chain = music_suggestions_final_prompt | llm | parseJSONArray

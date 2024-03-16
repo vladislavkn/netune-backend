@@ -1,20 +1,20 @@
+import logging
+from fastapi.middleware.cors import CORSMiddleware
+from shared.config import config
+from shared.models import MusicTasteRequestBody
+from shared.format_info_prompt import format_info_prompt
+from music_suggestions.chain import music_suggestions_chain
+from music_taste.chain import music_taste_chain
 from fastapi import FastAPI
 
-from music_taste.chain import music_taste_chain
-from music_suggestions.chain import music_suggestions_chain
-from shared.format_info_prompt import format_info_prompt
-from shared.models import MusicTasteRequestBody
-from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-
-origins = [
-    "http://localhost:5173",
-]
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.__dict__[config['LOGLEVEL']])
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=[config['FRONTEND_URL']],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -28,11 +28,21 @@ def health():
 
 @app.post('/taste')
 def taste(data: MusicTasteRequestBody):
-    prompt = format_info_prompt(data.tracks, data.authors)
-    return music_taste_chain.invoke({"input": prompt})
+    logger.info('Taste request: %s', data.model_dump(mode='json'))
+    prompt = format_info_prompt(data.tracks, data.authors, personal=False)
+    logger.debug('Taste prompt: %s', prompt)
+
+    output = music_taste_chain.invoke({"input": prompt})
+    logger.info('Taste output: %s', output)
+    return output
 
 
 @app.post('/suggestions')
 def taste(data: MusicTasteRequestBody):
-    prompt = format_info_prompt(data.tracks, data.authors)
-    return music_suggestions_chain.invoke({"input": prompt})
+    logger.info('Suggestions request: %s', data.model_dump(mode='json'))
+    prompt = format_info_prompt(data.tracks, data.authors, personal=True)
+    logger.debug('Suggestions prompt: %s', prompt)
+
+    output = music_suggestions_chain.invoke({"input": prompt})
+    logger.info('Suggestions output: %s', output)
+    return output
