@@ -28,7 +28,7 @@ def health():
 
 @app.post('/taste')
 def taste(data: MusicTasteRequestBody):
-    logger.info('Taste request: %s', data.model_dump(mode='json'))
+    logger.info('Taste request: %s', data.dump_formatted())
     prompt = format_info_prompt(data.tracks, data.authors, personal=False)
     logger.debug('Taste prompt: %s', prompt)
 
@@ -39,7 +39,7 @@ def taste(data: MusicTasteRequestBody):
 
 @app.post('/suggestions')
 def taste(data: MusicTasteRequestBody):
-    logger.info('Suggestions request: %s', data.model_dump(mode='json'))
+    logger.info('Suggestions request: %s', data.dump_formatted())
     prompt = format_info_prompt(data.tracks, data.authors, personal=True)
     logger.debug('Suggestions prompt: %s', prompt)
 

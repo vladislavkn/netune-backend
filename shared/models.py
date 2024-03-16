@@ -1,3 +1,4 @@
+import json
 from pydantic import BaseModel
 
 
@@ -14,3 +15,7 @@ class Track(BaseModel):
 class MusicTasteRequestBody(BaseModel):
     tracks: list[Track]
     authors: list[Author]
+
+    def dump_formatted(self):
+        model_dict = self.model_dump(mode='json')
+        return json.dumps(model_dict, indent=4)
