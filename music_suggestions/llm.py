@@ -6,7 +6,7 @@ from langchain.llms.base import LLM
 
 llm: LLM = G4FLLM(
     model=models.__dict__[os.environ.get(
-        'SUGGESTIONS_LLM_MODEL', 'gpt-35-turbo')],
+        'SUGGESTIONS_LLM_MODEL', 'gpt_35_turbo')],
     provider=Provider.__dict__[os.environ.get(
         'SUGGESTIONS_LLM_PROVIDER',
         'FlowGpt'
